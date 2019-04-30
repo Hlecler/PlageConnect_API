@@ -6,84 +6,53 @@ const request = require("request");
 
 import {User, users} from "./data/users";
 import {sessions} from "./data/sessions";
-import {accounts} from "./data/accounts";
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-////////////////// PAGES ///////////////////
-app.get("/", (req, res) => {
-    fs.readFile("./pages/login.html", (err, data) => {
-        if(err){
-            res.writeHead(503);
-            res.end();
-        } else {
-            res.writeHead(200, {"Content-Type": "text/html"});
-            res.end(data);
-        }
-    })
-});
 
 app.post("/moodle/token", (req, res) => {
-	request.post(process.env.MOODLEHOST+"/login/token.php?username="+ process.env.MOODLEAUTH+"&password="+process.env.MOODLEPWD+"&service="+process.env.MOODLESERVICE, null, 
-		(error, res, body) => {
+	var urlMoodleToken = process.env.MOODLEHOST+"/login/token.php?username="+ process.env.MOODLEAUTH+"&password="+process.env.MOODLEPWD+"&service="+process.env.MOODLESERVICE;
+	request.post(urlMoodleToken, null, 
+		(error, response1, body) => {
+
 	  	if (error) {
 	    	console.error(error)
 	    	return
 	  	}
-	  	if(res.statusCode === 200){
+	  	if(response1.statusCode === 200){
 	  		var token = JSON.parse(body).token;
-	  		var user = {
-	  			idnumber : 2, email : "hugo.lecler@laposte.net"
-	  		};
-	  		var json = JSON.stringify(user);
-	  		console.log("Token récupéré : " +token);
+	  		var url = process.env.MOODLEHOST+"/webservice/rest/server.php?wstoken="
+	  		+process.env.MOODLETOKENWEB+"&wsfunction=auth_userkey_request_login_url&moodlewsrestformat=json&user[email]="+req.body.id;
 
-	  		var url = process.env.MOODLEHOST+"/webservice/rest/server.php?wstoken="+"fa389fae2dc5de43b81e1292477f2c64"+"&wsfunction=auth_userkey_request_login_url&moodlewsrestformat=json";
-	  		console.log(url);
-	  		request.post(url, json, (error, res, body) => {
-	  			if (error) {
+	  		request.post(url, null, (error, response2, body) => {
+	  			if (error) 
+	  			{
 	  				console.error(error)
 	  				return
 	  			}
-	  			console.log("hello");
-	  			console.log(body);
+	  			var urlConnection = JSON.parse(body);
+	  			res.data = body;
+	  			if(response2.statusCode === 200)
+				{
+					res.writeHead(200, {"Content-Type": "application/json"})
+ 					res.end(JSON.stringify(res.data));
+				}
+			    else
+				{
+					res.writeHead(401, {"Content-Type": "application/json"})
+					res.end();
+				}
 	  		})
+
 	  	}
 	})
+});
 
-	const id = req.body.id;
-	console.log("Identifiant : " + id);
-
- 	res.writeHead(200, {"Content-Type": "text/html"})
- 	res.end();
-})
-
-app.post("/moodle/connect", (req, res) => {
-	var url = process.env.MOODLEHOST+"/webservice/rest/server.php?wstoken="+"fa389fae2dc5de43b81e1292477f2c64"+"&wsfunction=auth_userkey_request_login_url&moodlewsrestformat=json&email=hirose@hotmail.fr";
-	var object =
-	{
-		'user' : {'email' : "hirose@hotmail.fr"}
-	};
-	var json = JSON.stringify(object);
-	console.log(json);
-	request.post(url, json, (error, result, body) => 
-	{
-		if (error) {
-			console.error(error)
-			return
-		}
-		console.log(body);
-	})
-	res.writeHead(200)
-	res.end();
-})
-
-////////////////// API ////////////////////
 app.post("/login", (req, res) => {
     const id = req.body.id;
     const pwd = req.body.pwd;

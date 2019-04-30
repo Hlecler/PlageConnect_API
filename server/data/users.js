@@ -8,8 +8,9 @@ export class User {
 class Users {
     constructor(){
         this.users = [
-            new User("12345", "1"),
-            new User("54231", "9876")
+            new User("hugo.lecler@etu.umontpellier.fr", "pwd"),
+            new User("test@moodle.com", "plage"),
+            new User("test1@moodle.com", "plage"),
         ]
         this.findByLogin = this.findByLogin.bind(this);
     }

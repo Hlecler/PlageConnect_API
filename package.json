@@ -1,4 +1,4 @@
- {
+{
   "name": "plageconnectapi",
   "version": "1.0.0",
   "description": "the server for plageconnect",
@@ -19,7 +19,7 @@
     "babel-register": "^6.26.0"
   },
   "scripts": {
-    "start": "node server/start.js"
+    "start": "nodemon server/start.js"
   },
   "author": "hugo lecler",
   "license": "ISC"
