@@ -12,7 +12,4 @@ COPY . .
 
 EXPOSE 3000
 
-#RUN docker compose up
-#RUN docker compose run
-
 CMD [ "npm", "start" ]
