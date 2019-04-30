@@ -9,7 +9,7 @@ import {sessions} from "./data/sessions";
 import {accounts} from "./data/accounts";
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 
 app.use(bodyParser.json());
@@ -27,20 +27,6 @@ app.get("/", (req, res) => {
         }
     })
 });
-
-app.get("/home", (req, res) => {
-    fs.readFile("./pages/home.html", (err, data) => {
-        if(err){
-            res.writeHead(503);
-            res.end();
-        } else {
-            const id = req.body.id;
-            const pwd = req.body.pwd;
-            res.writeHead(200, {"Content-Type": "text/html"});
-            res.end(data);
-        }
-    })
-})
 
 app.post("/moodle/token", (req, res) => {
 	request.post(process.env.MOODLEHOST+"/login/token.php?username="+ process.env.MOODLEAUTH+"&password="+process.env.MOODLEPWD+"&service="+process.env.MOODLESERVICE, null, 
