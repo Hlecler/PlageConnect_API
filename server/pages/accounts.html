@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Mes comptes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        jQuery.post(
+            "/accounts",
+            {
+                id: localStorage.getItem("userId"),
+                token: localStorage.getItem("token")
+            },
+            success,
+            "json"
+        )
+        function success(data){
+            console.log(data)
+            data.forEach(element => {
+                let li = document.createElement("li")
+                li.innerHTML = "<div onclick='selectAccount(" + element.accountNumber + ")'>" +
+                "<p>Compte " + element.accountNumber + "</p>" +
+                "<p>Solde : </p><span>" + element.balance + "</span>" +
+                "</div>"
+                document.getElementById("accounts-list").appendChild(li);
+            });
+        }
+        function selectAccount(accNum){
+            window.location.href = "/myaccounts/" + accNum;
+        }
+    </script>
+</head>
+<body>
+    <h1>Mes comptes</h1>
+    <ul id="accounts-list">
+    </ul>
+    <input type="button" value="Retour à l'accueil" onclick="window.location.href = '/home'">
+</body>
+</html>

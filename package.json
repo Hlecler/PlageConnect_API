@@ -1,0 +1,26 @@
+ {
+  "name": "server",
+  "version": "1.0.0",
+  "description": "the server for plageconnect",
+  "main": "server.js",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "nodemon": "^1.18.11",
+    "mongodb": "^3.1.10",
+    "expressjs": "^1.0.1",
+    "request": "^2.88.0",
+    "uuid": "^3.3.2",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0"
+  },
+  "scripts": {
+    "start": "nodemon server/start.js"
+  },
+  "author": "hugo lecler",
+  "license": "ISC"
+}

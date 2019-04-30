@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Accueil</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function logout(){
+            jQuery.post(
+                "/logout",
+                {
+                    id: localStorage.getItem("userId"),
+                    token: localStorage.getItem("token")
+                },
+                success
+            )
+        }
+        function success(){
+            window.location.href = "/";
+        }
+
+        function myAccounts(){
+            window.location.href = "/myaccounts";
+        }
+    </script>
+</head>
+<body>
+    <h1>Mon espace personnel</h1>
+    <br>
+    <input type="button" value="Mes comptes" onclick="myAccounts()">
+    <br>
+    <input type="button" value="Effectuer un virement" onclick="window.location.href = '/transfert'">
+    <br>
+    <input type="button" value="Déconnexion" onclick="logout()">
+</body>
+</html>

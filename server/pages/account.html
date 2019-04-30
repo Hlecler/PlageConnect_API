@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Détails du compte</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        const splitUrl = window.location.href.split("/")
+        const accNum = splitUrl[splitUrl.length-1]
+        jQuery.post(
+            "/accounts/" + accNum,
+            {
+                id: localStorage.getItem("userId"),
+                token: localStorage.getItem("token")
+            },
+            success,
+            "json"
+        )
+        function success(data){
+            document.getElementById("account").innerHTML = "<h1>" + data.number + "</h1>" +
+            "<label>Solde : </label>" +
+            "<span>" + data.bal + "</span>" +
+            "<p>Historique des mouvements</p>" +
+            "<li id='mouvements'></li>"
+            data.operations.forEach(element => {
+                console.log(element)
+                let li = document.createElement("li")
+                li.innerHTML = "<div><h2>" + element.label + "</h2>" +
+                "<p>" + new Date(parseInt(element.date)).toLocaleDateString() + "</p>" +
+                "<span>" + element.amount + "</span>" +
+                "</div>"
+                document.getElementById("mouvements").appendChild(li);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="account">
+    </div>
+    <input type="button" value="Retour aux comptes" onclick="window.location.href = '/myaccounts'">
+</body>
+</html>
